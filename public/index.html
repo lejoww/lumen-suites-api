@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e0d0b">
+  <title>Lumen Suites · API</title>
+  <style>
+    :root {
+      --fondo: #0e0d0b;
+      --superficie: #171512;
+      --borde: #2c2822;
+      --texto: #f5f0e6;
+      --texto-suave: #bdb3a2;
+      --acento: #d9b87c;
+      --verde: #3ddc84;
+      --rojo: #ff6b5e;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 18px; -webkit-text-size-adjust: 100%; }
+
+    body {
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: var(--sans);
+      line-height: 1.4;
+      min-height: 100vh;
+      padding: max(28px, env(safe-area-inset-top)) 20px max(40px, env(safe-area-inset-bottom));
+    }
+
+    main {
+      max-width: 560px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+    }
+
+    /* Marca */
+    .marca { text-align: center; padding-top: 8px; }
+    .marca .linea {
+      width: 48px;
+      height: 2px;
+      background: var(--acento);
+      margin: 0 auto 22px;
+    }
+    .marca h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 2.7rem;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+    .marca .mensaje {
+      margin-top: 14px;
+      font-size: 1.2rem;
+      color: var(--acento);
+      min-height: 1.7rem;
+    }
+
+    /* Estado */
+    .estado {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      padding: 22px 22px;
+    }
+    .en-linea {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
+    .punto {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--verde);
+      flex-shrink: 0;
+    }
+    .punto::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--verde);
+      animation: pulso 2s ease-out infinite;
+    }
+    @keyframes pulso {
+      0%   { transform: scale(1);   opacity: 0.6; }
+      100% { transform: scale(2.6); opacity: 0; }
+    }
+    .caido .punto, .caido .punto::after { background: var(--rojo); }
+
+    .insignia {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--fondo);
+      background: var(--acento);
+      border-radius: 999px;
+      padding: 8px 18px;
+      white-space: nowrap;
+    }
+
+    /* Host */
+    .host { text-align: center; }
+    .etiqueta {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--texto-suave);
+    }
+    .host .valor {
+      margin-top: 12px;
+      font-size: clamp(2rem, 9.5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+    .host .protocolo {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 1.1rem;
+      color: var(--acento);
+      border: 1px solid var(--acento);
+      border-radius: 999px;
+      padding: 6px 16px;
+    }
+
+    /* Panel */
+    .panel {
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      padding: 6px 22px;
+    }
+    .fila {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 18px 0;
+      font-size: 1.2rem;
+    }
+    .fila + .fila { border-top: 1px solid var(--borde); }
+    .fila dt { color: var(--texto-suave); }
+    .fila dd {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    /* Secciones */
+    h2 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 1.75rem;
+      margin-bottom: 18px;
+    }
+
+    /* Suites */
+    .suites { display: flex; flex-direction: column; gap: 14px; }
+    .suite {
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-left: 3px solid var(--acento);
+      border-radius: 16px;
+      padding: 20px 22px;
+    }
+    .suite .ciudad {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--acento);
+    }
+    .suite .nombre {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      margin-top: 6px;
+    }
+    .suite .precio {
+      margin-top: 8px;
+      font-size: 1.15rem;
+      color: var(--texto-suave);
+    }
+    .suite .precio strong { color: var(--texto); font-size: 1.3rem; }
+
+    /* Endpoints */
+    .endpoints { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .endpoints a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 64px;
+      padding: 14px 20px;
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-radius: 16px;
+      color: var(--texto);
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      overflow-wrap: anywhere;
+    }
+    .endpoints a:active, .endpoints a:hover { border-color: var(--acento); }
+    .metodo {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--acento);
+      border: 1px solid var(--acento);
+      border-radius: 8px;
+      padding: 3px 8px;
+      flex-shrink: 0;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--texto-suave);
+      font-size: 1rem;
+      padding-top: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .punto::after { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="marca">
+      <div class="linea"></div>
+      <h1>Lumen Suites</h1>
+      <p class="mensaje" id="mensaje"></p>
+    </header>
+
+    <section class="estado" id="estado" aria-live="polite">
+      <div class="en-linea">
+        <span class="punto" aria-hidden="true"></span>
+        <span id="estado-texto">API en línea</span>
+      </div>
+      <span class="insignia" id="version">v—</span>
+    </section>
+
+    <section class="host">
+      <p class="etiqueta">Abierto desde</p>
+      <p class="valor" id="host"></p>
+      <p class="protocolo" id="protocolo"></p>
+    </section>
+
+    <dl class="panel">
+      <div class="fila"><dt>Node</dt><dd id="node">—</dd></div>
+      <div class="fila"><dt>Entorno</dt><dd id="entorno">—</dd></div>
+      <div class="fila"><dt>Encendido</dt><dd id="encendido">—</dd></div>
+    </dl>
+
+    <section>
+      <h2>Suites destacadas</h2>
+      <div class="suites" id="suites"></div>
+    </section>
+
+    <section>
+      <h2>Endpoints</h2>
+      <ul class="endpoints">
+        <li><a href="/api/suites"><span class="metodo">GET</span>/api/suites</a></li>
+        <li><a href="/api/suites/1"><span class="metodo">GET</span>/api/suites/1</a></li>
+        <li><a href="/api/suites?ciudad=Madrid"><span class="metodo">GET</span>/api/suites?ciudad=Madrid</a></li>
+        <li><a href="/api/estado"><span class="metodo">GET</span>/api/estado</a></li>
+      </ul>
+    </section>
+
+    <footer>Lumen Suites · API de demostración</footer>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // El host se muestra al instante, sin esperar a la API.
+    $("host").textContent = location.host;
+    $("protocolo").textContent = location.protocol === "https:"
+      ? "Conexión segura · HTTPS"
+      : "Conexión local · HTTP";
+
+    function formatearTiempo(total) {
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      if (h > 0) return `${h} h ${m} min ${s} s`;
+      if (m > 0) return `${m} min ${s} s`;
+      return `${s} s`;
+    }
+
+    function marcarEnLinea(enLinea) {
+      $("estado").classList.toggle("caido", !enLinea);
+      $("estado-texto").textContent = enLinea ? "API en línea" : "Sin conexión";
+    }
+
+    async function actualizarEstado() {
+      try {
+        const respuesta = await fetch("/api/estado", { cache: "no-store" });
+        if (!respuesta.ok) throw new Error(respuesta.status);
+        const datos = await respuesta.json();
+        $("version").textContent = "v" + datos.version;
+        $("mensaje").textContent = datos.mensaje;
+        $("node").textContent = datos.node;
+        $("entorno").textContent = datos.entorno;
+        $("encendido").textContent = formatearTiempo(datos.encendidoSegundos);
+        marcarEnLinea(true);
+      } catch {
+        marcarEnLinea(false);
+      } finally {
+        setTimeout(actualizarEstado, 1000);
+      }
+    }
+
+    async function cargarSuites() {
+      const contenedor = $("suites");
+      try {
+        const respuesta = await fetch("/api/suites");
+        const suites = await respuesta.json();
+        contenedor.replaceChildren(...suites.slice(0, 3).map((suite) => {
+          const tarjeta = document.createElement("article");
+          tarjeta.className = "suite";
+          const ciudad = document.createElement("p");
+          ciudad.className = "ciudad";
+          ciudad.textContent = suite.ciudad;
+          const nombre = document.createElement("p");
+          nombre.className = "nombre";
+          nombre.textContent = suite.nombre;
+          const precio = document.createElement("p");
+          precio.className = "precio";
+          const monto = document.createElement("strong");
+          monto.textContent = `$${suite.precioNoche} USD`;
+          precio.append(monto, " por noche");
+          tarjeta.append(ciudad, nombre, precio);
+          return tarjeta;
+        }));
+      } catch {
+        contenedor.textContent = "No se pudieron cargar las suites.";
+      }
+    }
+
+    actualizarEstado();
+    cargarSuites();
+  </script>
+</body>
+</html>
